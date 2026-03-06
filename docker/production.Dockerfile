@@ -30,12 +30,14 @@ FROM base
 
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
+
+COPY docker/docker-entrypoint-prod.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 USER 1000:1000
 
 COPY --chown=rails:rails --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --chown=rails:rails --from=build /rails /rails
-
-COPY --chown=rails:rails docker/docker-entrypoint-prod.sh /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 3000
