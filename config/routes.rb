@@ -1,0 +1,42 @@
+Rails.application.routes.draw do
+  devise_for :users,
+             path: "api/v1/auth",
+             path_names: {
+               sign_in: "sign_in",
+               sign_out: "sign_out",
+               registration: "sign_up"
+             },
+             controllers: {
+               sessions: "api/v1/auth/sessions",
+               registrations: "api/v1/auth/registrations"
+             },
+             defaults: { format: :json }
+
+  namespace :api do
+    namespace :v1 do
+      get "auth/me", to: "auth/me#show"
+      post "auth/verify", to: "auth/verifications#create"
+      post "auth/resend_verification", to: "auth/verifications#resend"
+
+      get "search", to: "search#index"
+      resources :collections, only: [:index, :show]
+      resources :products, only: [:index, :show]
+      resources :newsletter_subscribers, only: [:create], path: "newsletter"
+      resources :contact_messages, only: [:create]
+
+      namespace :admin do
+        get "dashboard", to: "dashboard#index"
+        get "order_statuses", to: "order_statuses#index"
+        resources :orders, only: [:index, :show, :update]
+        resources :products, only: [:index, :show, :create, :update]
+        resources :classifications, param: :id, only: [:index, :show, :create, :update] do
+          resources :classification_values, only: [:index, :create, :update, :destroy]
+        end
+        get "configuration", to: "settings#index"
+        patch "configuration", to: "settings#update"
+      end
+    end
+  end
+
+  get "up" => "rails/health#show", as: :rails_health_check
+end
