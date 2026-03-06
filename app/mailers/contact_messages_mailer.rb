@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ContactMessagesMailer < ActionMailer::Base
-  default from: "noreply@petalsforher.com"
+  default from: ENV.fetch("MAIL_FROM", "noreply@petalsforher.com")
 
   def notify(contact_message)
     @contact_message = contact_message

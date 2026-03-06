@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserVerificationMailer < ActionMailer::Base
-  default from: "noreply@petalsforher.com"
+  default from: ENV.fetch("MAIL_FROM", "noreply@petalsforher.com")
 
   def verification_code(user)
     @user = user

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Devise.setup do |config|
-  config.mailer_sender = "noreply@petalsforher.com"
+  config.mailer_sender = ENV.fetch("MAIL_FROM", "noreply@petalsforher.com")
   require "devise/orm/active_record"
 
   config.authentication_keys = [:email]
