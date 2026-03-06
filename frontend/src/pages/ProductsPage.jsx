@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function ProductCard({ product }) {
+  const productSlug = product?.slug ?? product?.id
   const displayPrice =
     product?.price != null
       ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price)
@@ -11,14 +13,14 @@ function ProductCard({ product }) {
 
   return (
     <Link
-      to={`/product/${product?.id}`}
+      to={`/product/${productSlug}`}
       className="group block bg-white rounded-xl overflow-hidden border border-stone-100 hover:shadow-lg transition"
     >
       <div className="aspect-square bg-stone-50 flex items-center justify-center overflow-hidden">
         {product?.image_url ? (
           <img
             src={product.image_url}
-            alt={product.name}
+            alt={product?.name ? `${product.name} – ${product?.collection?.name || 'silk bouquet'} from Petals for Her` : 'Product'}
             className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
           />
         ) : (
@@ -62,6 +64,11 @@ function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF9F7] text-stone-800">
+      <SEO
+        title="All Arrangements"
+        description="Explore our full collection of silk bouquets with bespoke fragrances. Timeless beauty, handcrafted arrangements."
+        canonicalPath="/products"
+      />
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-stone-800 mb-2">

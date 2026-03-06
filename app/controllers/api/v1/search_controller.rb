@@ -28,6 +28,7 @@ module Api
       def search_product_json(product)
         {
           id: product.id,
+          slug: product.slug,
           name: product.name,
           price: product.price.to_f,
           collection_name: product.collection.name,

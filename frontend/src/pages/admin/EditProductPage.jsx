@@ -19,6 +19,10 @@ const emptyForm = {
   gift_wrapping_included: true,
   ribbon_color_id: '',
   sku: '',
+  meta_title: '',
+  meta_description: '',
+  occasion_ids: [],
+  active: true,
 }
 
 function productToForm(product) {
@@ -39,7 +43,11 @@ function productToForm(product) {
     gift_wrapping_included: product.gift_wrapping_included ?? true,
     ribbon_color_id: product.ribbon_color_id ? String(product.ribbon_color_id) : '',
     sku: product.sku ?? '',
+    meta_title: product.meta_title ?? '',
+    meta_description: product.meta_description ?? '',
     image_url: product.image_url,
+    occasion_ids: product.occasion_ids ?? [],
+    active: product.active ?? true,
   }
 }
 
@@ -50,32 +58,46 @@ export default function EditProductPage() {
   const [product, setProduct] = useState(null)
   const [form, setForm] = useState(emptyForm)
   const [collections, setCollections] = useState([])
+  const [occasions, setOccasions] = useState([])
   const [classifications, setClassifications] = useState({})
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
-  const [imageFile, setImageFile] = useState(null)
-  const [imagePreview, setImagePreview] = useState(null)
+  const [images, setImages] = useState([
+    { file: null, preview: null, existingUrl: null },
+    { file: null, preview: null, existingUrl: null },
+    { file: null, preview: null, existingUrl: null },
+  ])
 
   useEffect(() => {
     if (!id) return
     async function load() {
       try {
-        const [productRes, collectionsRes, classificationsRes] = await Promise.all([
+        const [productRes, collectionsRes, classificationsRes, occasionsRes] = await Promise.all([
           fetchWithAuth(`/api/v1/admin/products/${id}`),
           fetch('/api/v1/collections'),
           fetchWithAuth('/api/v1/admin/classifications?codes=vase_type,ribbon_material,ribbon_color,primary_fragrance'),
+          fetchWithAuth('/api/v1/admin/occasions?per_page=999'),
         ])
         if (!productRes.ok) throw new Error('Product not found')
         const productData = await productRes.json()
         setProduct(productData)
         setForm(productToForm(productData))
+        setImages([
+          { file: null, preview: null, existingUrl: productData.image_url || null },
+          { file: null, preview: null, existingUrl: productData.gallery_image_urls?.[0] || null },
+          { file: null, preview: null, existingUrl: productData.gallery_image_urls?.[1] || null },
+        ])
         if (collectionsRes.ok) setCollections(await collectionsRes.json())
         if (classificationsRes.ok) {
           const data = await classificationsRes.json()
           const map = {}
           data.forEach((c) => { map[c.code] = c })
           setClassifications(map)
+        }
+        if (occasionsRes.ok) {
+          const data = await occasionsRes.json()
+          setOccasions(data.data ?? [])
         }
       } catch {
         setError('Product not found')
@@ -86,14 +108,22 @@ export default function EditProductPage() {
     load()
   }, [id, fetchWithAuth])
 
-  function handleImageChange(e) {
+  function handleImageChange(index, e) {
     const file = e.target.files?.[0]
-    if (file) {
-      setImageFile(file)
-      const reader = new FileReader()
-      reader.onloadend = () => setImagePreview(reader.result)
-      reader.readAsDataURL(file)
+    if (!file) return
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setImages((prev) =>
+        prev.map((slot, i) => (i === index ? { ...slot, file, preview: reader.result } : slot))
+      )
     }
+    reader.readAsDataURL(file)
+  }
+
+  function handleImageRemove(index) {
+    setImages((prev) =>
+      prev.map((slot, i) => (i === index ? { file: null, preview: null, existingUrl: null } : slot))
+    )
   }
 
   async function handleSubmit() {
@@ -130,27 +160,28 @@ export default function EditProductPage() {
         gift_wrapping_included: form.gift_wrapping_included,
         ribbon_color_id: form.ribbon_color_id || null,
         sku: form.sku?.trim() || null,
+        meta_title: form.meta_title?.trim() || '',
+        meta_description: form.meta_description?.trim() || '',
+        active: form.active,
       }
 
-      let res
-      if (imageFile) {
-        const fd = new FormData()
-        Object.entries(body).forEach(([k, v]) => {
-          if (v != null && v !== '') fd.append(k, v)
-        })
-        fd.append('image', imageFile)
-        const token = localStorage.getItem('petals_jwt')
-        res = await fetch(`/api/v1/admin/products/${id}`, {
-          method: 'PATCH',
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-          body: fd,
-        })
-      } else {
-        res = await fetchWithAuth(`/api/v1/admin/products/${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify(body),
-        })
-      }
+      const fd = new FormData()
+      Object.entries(body).forEach(([k, v]) => {
+        if (v != null && v !== '') fd.append(k, v)
+      })
+      ;(form.occasion_ids ?? []).forEach((oid) => fd.append('occasion_ids[]', oid))
+
+      if (images[0]?.file) fd.append('image', images[0].file)
+      images.slice(1).forEach((slot) => {
+        if (slot?.file) fd.append('gallery_images[]', slot.file)
+      })
+
+      const token = localStorage.getItem('petals_jwt')
+      const res = await fetch(`/api/v1/admin/products/${id}`, {
+        method: 'PATCH',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: fd,
+      })
 
       const data = await res.json().catch(() => ({}))
       if (res.ok) {
@@ -165,10 +196,15 @@ export default function EditProductPage() {
 
   if (loading) {
     return (
-      <div className="p-8">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-stone-200 rounded w-64" />
-          <div className="h-96 bg-stone-200 rounded-xl" />
+      <div className="min-h-screen bg-[#FAF9F7] p-8">
+        <div className="animate-pulse space-y-6 max-w-6xl mx-auto">
+          <div className="h-4 bg-stone-200 rounded w-48" />
+          <div className="h-8 bg-stone-200 rounded w-72" />
+          <div className="h-10 bg-stone-200 rounded w-full max-w-md" />
+          <div className="grid grid-cols-3 gap-8">
+            <div className="col-span-2 h-96 bg-stone-200 rounded-xl" />
+            <div className="h-96 bg-stone-200 rounded-xl" />
+          </div>
         </div>
       </div>
     )
@@ -176,60 +212,82 @@ export default function EditProductPage() {
 
   if (error && !product) {
     return (
-      <div className="p-8">
-        <p className="text-stone-600 mb-4">{error}</p>
-        <Link to="/admin/products" className="text-[#D4A5A5] font-medium hover:underline">
-          ← Back to products
-        </Link>
+      <div className="min-h-screen bg-[#FAF9F7] p-8">
+        <div className="max-w-6xl mx-auto">
+          <p className="text-stone-600 mb-4">{error}</p>
+          <Link to="/admin/products" className="text-[#E8365D] font-medium hover:underline">
+            &larr; Back to products
+          </Link>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="p-8">
-      <nav className="text-sm text-stone-500 mb-4">
-        <Link to="/admin/products" className="hover:text-[#D4A5A5]">Products</Link>
-        <span className="mx-2">›</span>
-        <Link to={`/admin/products/${id}`} className="hover:text-[#D4A5A5]">{product?.name}</Link>
-        <span className="mx-2">›</span>
-        <span className="text-stone-800">Edit</span>
-      </nav>
+    <div className="min-h-screen bg-[#FAF9F7]">
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* Breadcrumb */}
+        <nav className="text-sm text-stone-500 mb-6">
+          <Link to="/admin/products" className="hover:text-[#E8365D] transition-colors">Products</Link>
+          <span className="mx-2 text-stone-300">&rsaquo;</span>
+          <span className="text-stone-800">Edit Product</span>
+        </nav>
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-stone-800 mb-2">Edit Product</h1>
-          <p className="text-stone-500 mt-1">Update your floral arrangement configuration.</p>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-stone-900">Edit Product: {product?.name}</h1>
+            <p className="text-stone-500 mt-1">Curate your next beautiful floral masterpiece.</p>
+          </div>
+          <div className="flex gap-3 shrink-0">
+            <Link
+              to={`/admin/products/${id}`}
+              className="px-5 py-2.5 border border-[#E8365D] text-[#E8365D] rounded-lg font-medium hover:bg-[#E8365D]/5 transition-colors"
+            >
+              Discard
+            </Link>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={saving}
+              className="px-5 py-2.5 bg-[#E8365D] text-white rounded-lg font-medium hover:bg-[#D42E52] disabled:opacity-50 transition-colors"
+            >
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <Link
-            to={`/admin/products/${id}`}
-            className="px-4 py-2 border border-stone-200 rounded-lg text-stone-700 font-medium hover:bg-stone-50"
-          >
-            Cancel
-          </Link>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={saving}
-            className="px-4 py-2 bg-[#D4A5A5] text-white rounded-lg font-medium hover:bg-[#B88A8A] disabled:opacity-50"
-          >
-            {saving ? 'Saving...' : 'Update Product'}
-          </button>
-        </div>
+
+        {/* Form */}
+        <ProductForm
+          form={form}
+          setForm={setForm}
+          collections={collections}
+          occasions={occasions}
+          classifications={classifications}
+          images={images}
+          onImageChange={handleImageChange}
+          onImageRemove={handleImageRemove}
+          onSubmit={handleSubmit}
+          saving={saving}
+          error={error}
+          mode="edit"
+        />
       </div>
 
-      <ProductForm
-        form={form}
-        setForm={setForm}
-        collections={collections}
-        classifications={classifications}
-        imageFile={imageFile}
-        imagePreview={imagePreview}
-        onImageChange={handleImageChange}
-        saving={saving}
-        error={error}
-        mode="edit"
-      />
+      {/* Floating save button */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={saving}
+          className="px-6 py-3 bg-[#E8365D] text-white rounded-xl font-medium shadow-lg shadow-[#E8365D]/25 hover:bg-[#D42E52] disabled:opacity-50 transition-all flex items-center gap-2"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          {saving ? 'Saving...' : 'Save Changes'}
+        </button>
+      </div>
     </div>
   )
 }

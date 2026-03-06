@@ -1,20 +1,21 @@
 import { Link } from 'react-router-dom'
 
 function ProductCard({ product }) {
+  const productSlug = product?.slug ?? product?.id
   const displayPrice = product?.price != null
     ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price)
     : '$120.00'
 
   return (
     <Link
-      to={`/product/${product?.id}`}
+      to={`/product/${productSlug}`}
       className="group block bg-white rounded-xl overflow-hidden border border-stone-100 hover:shadow-lg transition"
     >
       <div className="aspect-square bg-stone-50 flex items-center justify-center overflow-hidden">
         {product?.image_url ? (
           <img
             src={product.image_url}
-            alt={product.name}
+            alt={product?.name ? `${product.name} – ${product.collection?.name || 'silk bouquet'} from Petals for Her` : 'Product'}
             className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
           />
         ) : (

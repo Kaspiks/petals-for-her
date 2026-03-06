@@ -19,7 +19,9 @@ Rails.application.routes.draw do
       post "auth/resend_verification", to: "auth/verifications#resend"
 
       get "search", to: "search#index"
+      get "seo_config", to: "seo_config#show"
       resources :collections, only: [:index, :show]
+      resources :occasions, only: [:index, :show]
       resources :products, only: [:index, :show]
       resources :newsletter_subscribers, only: [:create], path: "newsletter"
       resources :contact_messages, only: [:create]
@@ -29,6 +31,8 @@ Rails.application.routes.draw do
         get "order_statuses", to: "order_statuses#index"
         resources :orders, only: [:index, :show, :update]
         resources :products, only: [:index, :show, :create, :update]
+        resources :collections
+        resources :occasions
         resources :classifications, param: :id, only: [:index, :show, :create, :update] do
           resources :classification_values, only: [:index, :create, :update, :destroy]
         end
@@ -39,4 +43,5 @@ Rails.application.routes.draw do
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
+  get "sitemap.xml", to: "sitemap#index", defaults: { format: :xml }
 end

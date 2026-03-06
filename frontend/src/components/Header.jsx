@@ -32,7 +32,7 @@ function Header() {
                   if (item.type === 'collection') {
                     navigate(`/products${item.id ? `?collection=${item.id}` : ''}`)
                   } else {
-                    navigate(`/product/${item.id}`)
+                    navigate(`/product/${item.slug ?? item.id}`)
                   }
                 }}
               />

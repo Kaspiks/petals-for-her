@@ -55,11 +55,11 @@ function Footer() {
           <div>
             <h3 className="text-xs uppercase tracking-widest text-stone-500 mb-4">Boutique Location</h3>
             <p className="text-sm text-stone-400">
-              123 Flower Lane
+              Rand
               <br />
-              New York, NY 10001
+              Street
               <br />
-              (555) 123-4567
+              Num
             </p>
           </div>
         </div>

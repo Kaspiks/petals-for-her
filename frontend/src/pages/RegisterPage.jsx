@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import SEO from '../components/SEO'
 
 function RegisterPage() {
   const navigate = useNavigate()
@@ -36,6 +37,7 @@ function RegisterPage() {
 
   return (
     <div className="min-h-screen flex">
+      <SEO title="Create Account" noindex />
       {/* Left - Image */}
       <div className="hidden lg:block lg:w-1/2 relative min-h-screen">
         <img

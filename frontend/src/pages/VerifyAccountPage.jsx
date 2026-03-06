@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import { useAuth } from '../contexts/AuthContext'
+import SEO from '../components/SEO'
 
 function VerifyAccountPage() {
   const [searchParams] = useSearchParams()
@@ -114,6 +115,7 @@ function VerifyAccountPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF9F7] flex flex-col">
+      <SEO title="Verify Your Email" noindex />
       <Header />
       <main className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">

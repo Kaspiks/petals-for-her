@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import SEO from '../components/SEO'
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -27,6 +28,7 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
+      <SEO title="Sign In" noindex />
       {/* Left - Image */}
       <div className="hidden lg:block lg:w-1/2 relative min-h-screen">
         <img

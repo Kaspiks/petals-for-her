@@ -1,5 +1,6 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function FloralDivider() {
   return (
@@ -14,6 +15,11 @@ function FloralDivider() {
 function PrivacyPolicyPage() {
   return (
     <>
+      <SEO
+        title="Privacy Policy"
+        description="How Petals for Her collects, uses, and protects your information. Privacy policy for our boutique and newsletter."
+        canonicalPath="/privacy_policy"
+      />
       <Header />
       <main className="min-h-screen bg-white">
         <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">

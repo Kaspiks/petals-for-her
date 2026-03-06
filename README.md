@@ -33,6 +33,21 @@ Run migrations and seed:
 docker compose exec web rails db:migrate db:seed
 ```
 
+#### Managing frontend dependencies (Docker)
+
+The frontend `node_modules` live inside a Docker named volume, **not** on your host machine. Always manage npm packages through the container:
+
+```bash
+# Install a new package
+docker compose exec frontend npm install <package-name>
+
+# Install all dependencies (e.g. after pulling changes to package.json)
+docker compose exec frontend npm install
+
+# If the frontend container isn't running
+docker compose run --rm frontend npm install <package-name>
+```
+
 ### Option 2: Local development
 
 **Backend:**

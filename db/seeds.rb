@@ -46,6 +46,21 @@ end
   end
 end
 
+# Sample occasions
+[
+  { name: "Anniversary", slug: "anniversary", description: "Celebrate years of love with timeless floral arrangements." },
+  { name: "Birthday", slug: "birthday", description: "Make every birthday bloom with curated bouquets." },
+  { name: "Wedding", slug: "wedding", description: "Elegant arrangements for the most special day." },
+  { name: "Graduation", slug: "graduation", description: "Honor achievements with beautiful floral gifts." },
+  { name: "Valentine's Day", slug: "valentines-day", description: "Express your love with romantic blooms." },
+].each do |attrs|
+  Occasion.find_or_create_by!(slug: attrs[:slug]) do |o|
+    o.name = attrs[:name]
+    o.description = attrs[:description]
+    o.active = true
+  end
+end
+
 # Development admin user (for testing dashboard)
 if Rails.env.development? && User.count.zero?
   User.create!(
@@ -68,10 +83,22 @@ defaults = {
   "store_name" => "Petals for Her",
   "contact_email" => "contact@petalsforher.com",
   "shipping_notice" => "Standard shipping 3-5 business days",
-  "currency" => "USD"
+  "currency" => "USD",
+  "seo_site_title" => "Petals for Her",
+  "seo_title_suffix" => " – Petals for Her",
+  "seo_default_description" => "Timeless beauty, captured in fragrance. Handcrafted silk bouquets with bespoke scents. Shop everlasting blooms and artisanal arrangements.",
+  "seo_default_og_image" => "",
+  "seo_org_name" => "Petals for Her",
+  "seo_org_email" => "concierge@petalsforher.com",
+  "seo_org_phone" => "",
+  "seo_org_address" => "",
+  "seo_org_logo_url" => "",
+  "seo_org_description" => "Timeless beauty, captured in fragrance. Handcrafted silk bouquets with bespoke scents."
 }
 defaults.each do |key, value|
-  StoreSetting.find_or_create_by!(key: key).update!(value: value)
+  StoreSetting.find_or_create_by!(key: key) do |s|
+    s.value = value
+  end
 end
 
 # Classifications for product options (vase, ribbon material, ribbon color)

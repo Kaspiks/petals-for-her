@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_06_120001) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_06_130002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,8 +66,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_120001) do
   end
 
   create_table "collections", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.text "description"
+    t.text "meta_description"
+    t.string "meta_title", limit: 255
     t.string "name", null: false
     t.string "slug", null: false
     t.datetime "updated_at", null: false
@@ -88,6 +91,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_120001) do
     t.string "email", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_newsletter_subscribers_on_email", unique: true
+  end
+
+  create_table "occasion_products", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "occasion_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["occasion_id", "product_id"], name: "index_occasion_products_on_occasion_id_and_product_id", unique: true
+    t.index ["occasion_id"], name: "index_occasion_products_on_occasion_id"
+    t.index ["product_id"], name: "index_occasion_products_on_product_id"
+  end
+
+  create_table "occasions", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.text "meta_description"
+    t.string "meta_title", limit: 255
+    t.string "name", null: false
+    t.string "slug", limit: 255, null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_occasions_on_slug", unique: true
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -131,6 +156,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_120001) do
     t.text "description"
     t.boolean "gift_wrapping_included", default: true, null: false
     t.boolean "include_scent_refill", default: false, null: false
+    t.text "meta_description"
+    t.string "meta_title", limit: 255
     t.string "name", null: false
     t.decimal "price", precision: 10, scale: 2, null: false
     t.bigint "primary_fragrance_option_id"
@@ -139,6 +166,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_120001) do
     t.string "scent_intensity", limit: 50, default: "moderate"
     t.string "silk_material_type", limit: 255
     t.string "sku", limit: 100
+    t.string "slug", limit: 255, null: false
     t.string "stock_status", limit: 50, default: "in_stock"
     t.datetime "updated_at", null: false
     t.bigint "vase_option_id"
@@ -149,6 +177,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_120001) do
     t.index ["ribbon_color_id"], name: "index_products_on_ribbon_color_id"
     t.index ["ribbon_material_id"], name: "index_products_on_ribbon_material_id"
     t.index ["sku"], name: "index_products_on_sku", unique: true
+    t.index ["slug"], name: "index_products_on_slug", unique: true
     t.index ["vase_option_id"], name: "index_products_on_vase_option_id"
   end
 
@@ -186,6 +215,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_120001) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "classification_values", "classifications"
+  add_foreign_key "occasion_products", "occasions"
+  add_foreign_key "occasion_products", "products"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "order_statuses"

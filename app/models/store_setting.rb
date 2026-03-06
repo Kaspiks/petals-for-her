@@ -23,7 +23,7 @@ class StoreSetting < ApplicationRecord
       return if hash.blank?
 
       hash.each do |key, value|
-        set(key.to_s, value) if value.present?
+        set(key.to_s, value)
       end
       all_as_hash
     end

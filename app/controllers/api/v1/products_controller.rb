@@ -10,7 +10,9 @@ module Api
       end
 
       def show
-        product = Product.active.find(params[:id])
+        product = Product.active.find_by(slug: params[:id]) || Product.active.find(params[:id])
+        raise ActiveRecord::RecordNotFound unless product
+
         render json: product_json(product)
       end
 
@@ -19,10 +21,14 @@ module Api
       def product_json(product)
         {
           id: product.id,
+          slug: product.slug,
           name: product.name,
           description: product.description,
           price: product.price.to_f,
           collection_type: product.collection_type,
+          stock_status: product.stock_status,
+          meta_title: product.meta_title,
+          meta_description: product.meta_description,
           collection: {
             id: product.collection.id,
             name: product.collection.name,

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function ContactUsPage() {
   const { user } = useAuth()
@@ -56,6 +57,11 @@ function ContactUsPage() {
 
   return (
     <>
+      <SEO
+        title="Contact Us"
+        description="Get in touch with Petals for Her. Concierge, private scent consultations, and bespoke silk flower inquiries."
+        canonicalPath="/contact_us"
+      />
       <Header />
       <main className="min-h-screen bg-[#FAF9F7]">
         {/* Two-column layout */}
