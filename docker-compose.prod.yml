@@ -1,0 +1,72 @@
+# Production stack for Petals for Her (Hetzner / Caddy)
+# Usage: ensure .env.production exists, then:
+#   docker compose -f docker-compose.prod.yml up -d
+# Frontend: build locally and rsync to deploy/frontend-dist (see deploy/release.sh)
+
+name: petals-for-her
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME:-petals_for_her}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME:-petals_for_her_production}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME:-petals_for_her} -d ${DATABASE_NAME:-petals_for_her_production}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/production.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      RAILS_ENV: production
+      PORT: "3000"
+      DATABASE_ADAPTER: postgresql
+      DATABASE_HOST: db
+      DATABASE_PORT: "5432"
+      DATABASE_NAME: ${DATABASE_NAME:-petals_for_her_production}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-petals_for_her}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      APP_HOST: ${APP_HOST:-petalsforher.com}
+      DEVISE_JWT_SECRET_KEY: ${DEVISE_JWT_SECRET_KEY}
+      RAILS_LOG_TO_STDOUT: "true"
+      SOLID_QUEUE_IN_PUMA: "true"
+    volumes:
+      - rails_storage:/rails/storage
+    depends_on:
+      db:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./deploy/frontend-dist:/srv/frontend:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  rails_storage:
+  caddy_data:
+  caddy_config:

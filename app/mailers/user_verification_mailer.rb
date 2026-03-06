@@ -27,9 +27,13 @@ class UserVerificationMailer < ActionMailer::Base
   def verify_account_url
     opts = Rails.application.config.action_mailer.default_url_options
     base_host = opts[:host] || "localhost"
-    base_port = opts[:port]
-    frontend_port = base_port == 3000 ? 5173 : (base_port || 80)
-    frontend_url = "http://#{base_host}:#{frontend_port}"
-    "#{frontend_url}/verify?email=#{ERB::Util.url_encode(@user.email)}"
+    protocol = opts[:protocol] || "http"
+    if Rails.env.production? && protocol == "https"
+      "#{protocol}://#{base_host}/verify?email=#{ERB::Util.url_encode(@user.email)}"
+    else
+      base_port = opts[:port]
+      frontend_port = base_port == 3000 ? 5173 : (base_port || 80)
+      "#{protocol}://#{base_host}:#{frontend_port}/verify?email=#{ERB::Util.url_encode(@user.email)}"
+    end
   end
 end
