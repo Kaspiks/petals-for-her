@@ -13,6 +13,15 @@ class User < ApplicationRecord
          jwt_revocation_strategy: self
 
   validates :full_name, presence: true, length: { maximum: 255 }
+
+  protected
+
+  # Skip Devise's built-in confirmation email — we use our own
+  # verification code flow via UserVerificationMailer instead.
+  def send_confirmation_instructions
+    generate_confirmation_token! unless @raw_confirmation_token
+    # no-op: don't send Devise's default confirmation email
+  end
 end
 
 # == Schema Information
