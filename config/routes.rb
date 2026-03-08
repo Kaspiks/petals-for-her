@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
       get "search", to: "search#index"
       get "seo_config", to: "seo_config#show"
+      get "fragrance_options", to: "fragrance_options#index"
       resources :collections, only: [:index, :show]
       resources :occasions, only: [:index, :show]
       resources :products, only: [:index, :show]

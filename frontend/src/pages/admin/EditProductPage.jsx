@@ -185,7 +185,7 @@ export default function EditProductPage() {
 
       const data = await res.json().catch(() => ({}))
       if (res.ok) {
-        navigate(`/admin/products/${id}`)
+        navigate(`/admin/products`)
       } else {
         setError(data.errors?.join(', ') || 'Failed to update product.')
       }

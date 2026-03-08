@@ -8,6 +8,8 @@ import VerifyAccountPage from './pages/VerifyAccountPage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import TermsOfServicePage from './pages/TermsOfServicePage'
 import ContactUsPage from './pages/ContactUsPage'
+import PublicCollectionsPage from './pages/CollectionsPage'
+import PublicOccasionsPage from './pages/OccasionsPage'
 import AdminRoute from './components/admin/AdminRoute'
 import AdminLayout from './pages/admin/AdminLayout'
 import DashboardPage from './pages/admin/DashboardPage'
@@ -39,6 +41,8 @@ function App() {
         <Route path="/verify" element={<VerifyAccountPage />} />
         <Route path="/privacy_policy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsOfServicePage />} />
+        <Route path="/collections" element={<PublicCollectionsPage />} />
+        <Route path="/occasions" element={<PublicOccasionsPage />} />
         <Route path="/contact_us" element={<ContactUsPage />} />
         <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
           <Route index element={<DashboardPage />} />

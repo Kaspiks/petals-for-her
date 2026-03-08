@@ -13,6 +13,12 @@ const StarIcon = ({ filled }) => (
   </svg>
 )
 
+const CheckIcon = () => (
+  <svg className="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill={ACCENT}>
+    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+  </svg>
+)
+
 const features = [
   {
     icon: (
@@ -88,6 +94,18 @@ const staticReviews = [
   { stars: 5, text: '"Best gift I\'ve ever given. The packaging was beautiful and the quality is unmatched."', name: 'Sarah L.' },
 ]
 
+const ImagePlaceholder = ({ className = 'w-12 h-12' }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>
+)
+
+const FlowerPlaceholder = ({ className = 'w-32 h-32' }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12 22c4.97 0 9-4.03 9-9-4.97 0-9 4.03-9 9zM5.6 10.25c0 1.38 1.12 2.5 2.5 2.5.53 0 1.01-.16 1.42-.44l-.02.19c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5l-.02-.19c.4.28.89.44 1.42.44 1.38 0 2.5-1.12 2.5-2.5 0-1-.6-1.86-1.46-2.27.24-.58.37-1.22.37-1.9 0-2.21-1.79-4-4-4-1.86 0-3.43 1.27-3.87 3.02-.55-.12-1.11-.02-1.6.27-1.22.68-1.65 2.23-.98 3.45.36.64 1 1.03 1.72 1.03.44 0 .87-.14 1.23-.4-.01.1-.01.19-.01.3z" />
+  </svg>
+)
+
 function ProductPage() {
   const { slug } = useParams()
   const [product, setProduct] = useState(null)
@@ -95,11 +113,14 @@ function ProductPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [quantity, setQuantity] = useState(1)
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
   useEffect(() => {
     if (!slug) return
     setLoading(true)
     setError(null)
+    setSelectedImageIndex(0)
+    setQuantity(1)
     fetch(`/api/v1/products/${encodeURIComponent(slug)}`)
       .then((res) => {
         if (!res.ok) throw new Error('Product not found')
@@ -158,6 +179,14 @@ function ProductPage() {
   const formatPrice = (price) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
 
+  const galleryImages = [
+    product.image_url,
+    ...(product.gallery_image_urls || []).slice(0, 2),
+  ]
+  while (galleryImages.length < 4) galleryImages.push(null)
+
+  const activeImageUrl = galleryImages[selectedImageIndex] || product.image_url
+
   return (
     <div className="min-h-screen bg-white text-stone-800">
       <SEO
@@ -179,11 +208,11 @@ function ProductPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <nav className="text-sm text-stone-400 flex items-center gap-1.5">
             <Link to="/" className="hover:text-stone-600 transition">Home</Link>
-            <span>/</span>
+            <span>&gt;</span>
             <Link to="/products" className="hover:text-stone-600 transition">Collections</Link>
             {product.collection?.name && (
               <>
-                <span>/</span>
+                <span>&gt;</span>
                 <span className="text-stone-600">{product.collection.name}</span>
               </>
             )}
@@ -193,43 +222,42 @@ function ProductPage() {
         {/* Product Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-            {/* Left: Images */}
+            {/* Left: Image Gallery */}
             <div>
               <div className="aspect-square bg-[#FAF9F7] rounded-2xl overflow-hidden border border-stone-100">
-                {product.image_url ? (
+                {activeImageUrl ? (
                   <img
-                    src={product.image_url}
+                    src={activeImageUrl}
                     alt={`${product.name} – ${product.collection?.name || 'silk bouquet'} from Petals for Her`}
                     className="w-full h-full object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-stone-300">
-                    <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 22c4.97 0 9-4.03 9-9-4.97 0-9 4.03-9 9zM5.6 10.25c0 1.38 1.12 2.5 2.5 2.5.53 0 1.01-.16 1.42-.44l-.02.19c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5l-.02-.19c.4.28.89.44 1.42.44 1.38 0 2.5-1.12 2.5-2.5 0-1-.6-1.86-1.46-2.27.24-.58.37-1.22.37-1.9 0-2.21-1.79-4-4-4-1.86 0-3.43 1.27-3.87 3.02-.55-.12-1.11-.02-1.6.27-1.22.68-1.65 2.23-.98 3.45.36.64 1 1.03 1.72 1.03.44 0 .87-.14 1.23-.4-.01.1-.01.19-.01.3z" />
-                    </svg>
+                    <FlowerPlaceholder />
                   </div>
                 )}
               </div>
-              {/* Thumbnails row */}
+
               <div className="grid grid-cols-4 gap-3 mt-4">
-                {[0, 1, 2, 3].map((i) => (
+                {galleryImages.map((url, i) => (
                   <button
                     key={i}
+                    onClick={() => setSelectedImageIndex(i)}
                     className={`aspect-square rounded-xl overflow-hidden border-2 transition ${
-                      i === 0 ? 'border-[#E8365D]' : 'border-stone-200 hover:border-stone-300'
+                      i === selectedImageIndex
+                        ? 'border-[#E8365D]'
+                        : 'border-stone-200 hover:border-stone-300'
                     }`}
                   >
-                    {i === 0 && product.image_url ? (
+                    {url ? (
                       <img
-                        src={product.image_url}
+                        src={url}
                         alt={`${product.name} view ${i + 1}`}
                         className="w-full h-full object-cover"
                       />
                     ) : (
                       <div className="w-full h-full bg-[#FAF9F7] flex items-center justify-center text-stone-300">
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                        <ImagePlaceholder className="w-6 h-6" />
                       </div>
                     )}
                   </button>
@@ -237,34 +265,55 @@ function ProductPage() {
               </div>
             </div>
 
-            {/* Right: Details */}
+            {/* Right: Product Info */}
             <div className="lg:pt-2">
-              <h1 className="font-serif text-2xl sm:text-3xl font-semibold text-stone-900 mb-3">
-                {product.name}
-              </h1>
-              <p className="text-xl font-bold mb-4" style={{ color: ACCENT }}>
-                {displayPrice}
-              </p>
-
-              {/* Stars */}
-              <div className="flex items-center gap-1 mb-5">
+              {/* Rating */}
+              <div className="flex items-center gap-1 mb-4">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <StarIcon key={s} filled />
                 ))}
                 <span className="ml-2 text-sm text-stone-400">(128 reviews)</span>
               </div>
 
+              {/* Name */}
+              <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-stone-900 mb-3">
+                {product.name}
+              </h1>
+
+              {/* Price */}
+              <p className="text-2xl font-bold mb-5" style={{ color: ACCENT }}>
+                {displayPrice}
+              </p>
+
+              {/* Description */}
               {product.description && (
-                <p className="text-stone-600 leading-relaxed mb-8">{product.description}</p>
+                <p className="text-stone-600 leading-relaxed mb-6">{product.description}</p>
               )}
 
-              {/* Quantity */}
+              {/* Info badges */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
+                <span className="flex items-center gap-1.5 text-sm text-stone-600">
+                  <CheckIcon /> Handcrafted Silk
+                </span>
+                <span className="flex items-center gap-1.5 text-sm text-stone-600">
+                  <CheckIcon /> Scented
+                </span>
+                <span className="flex items-center gap-1.5 text-sm text-stone-600">
+                  <CheckIcon /> Gift Ready
+                </span>
+              </div>
+
+              {/* Quantity selector */}
               <div className="mb-6">
                 <label className="text-sm font-medium text-stone-700 mb-2 block">Quantity</label>
-                <div className="inline-flex items-center border-2 rounded-lg overflow-hidden" style={{ borderColor: ACCENT }}>
+                <div
+                  className="inline-flex items-center border-2 rounded-lg overflow-hidden"
+                  style={{ borderColor: ACCENT }}
+                >
                   <button
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                     className="px-4 py-2.5 text-stone-600 hover:bg-stone-50 transition font-medium"
+                    aria-label="Decrease quantity"
                   >
                     &minus;
                   </button>
@@ -274,6 +323,7 @@ function ProductPage() {
                   <button
                     onClick={() => setQuantity((q) => q + 1)}
                     className="px-4 py-2.5 text-stone-600 hover:bg-stone-50 transition font-medium"
+                    aria-label="Increase quantity"
                   >
                     +
                   </button>
@@ -283,11 +333,15 @@ function ProductPage() {
               {/* Add to Cart */}
               <button
                 type="button"
-                className="w-full py-3.5 rounded-lg text-white font-semibold text-lg transition hover:opacity-90 active:scale-[0.98]"
+                className="w-full py-3.5 rounded-lg text-white font-semibold text-lg transition hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-2"
                 style={{ backgroundColor: ACCENT }}
               >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
                 Add to Cart
               </button>
+
               <p className="text-center text-sm text-stone-400 mt-3">
                 Free shipping on orders over $75
               </p>
@@ -337,12 +391,20 @@ function ProductPage() {
               </div>
             </div>
             <div className="aspect-[4/3] bg-[#FAF9F7] rounded-2xl overflow-hidden border border-stone-100 flex items-center justify-center">
-              <div className="text-center text-stone-300">
-                <svg className="w-20 h-20 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                </svg>
-                <p className="text-sm">Close-up image</p>
-              </div>
+              {product.image_url ? (
+                <img
+                  src={product.image_url}
+                  alt={`${product.name} close-up`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="text-center text-stone-300">
+                  <svg className="w-20 h-20 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                  <p className="text-sm">Close-up image</p>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -396,9 +458,7 @@ function ProductPage() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-stone-300">
-                        <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 22c4.97 0 9-4.03 9-9-4.97 0-9 4.03-9 9zM5.6 10.25c0 1.38 1.12 2.5 2.5 2.5.53 0 1.01-.16 1.42-.44l-.02.19c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5l-.02-.19c.4.28.89.44 1.42.44 1.38 0 2.5-1.12 2.5-2.5 0-1-.6-1.86-1.46-2.27.24-.58.37-1.22.37-1.9 0-2.21-1.79-4-4-4-1.86 0-3.43 1.27-3.87 3.02-.55-.12-1.11-.02-1.6.27-1.22.68-1.65 2.23-.98 3.45.36.64 1 1.03 1.72 1.03.44 0 .87-.14 1.23-.4-.01.1-.01.19-.01.3z" />
-                        </svg>
+                        <FlowerPlaceholder className="w-12 h-12" />
                       </div>
                     )}
                   </div>
@@ -408,6 +468,9 @@ function ProductPage() {
                   <p className="text-sm font-semibold mt-0.5" style={{ color: ACCENT }}>
                     {formatPrice(p.price)}
                   </p>
+                  {p.scent_profile && (
+                    <p className="text-xs text-stone-400 mt-0.5">{p.scent_profile}</p>
+                  )}
                 </Link>
               ))}
             </div>
