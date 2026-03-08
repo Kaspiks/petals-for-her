@@ -28,12 +28,14 @@ import EditCollectionPage from './pages/admin/EditCollectionPage'
 import OccasionsPage from './pages/admin/OccasionsPage'
 import AddOccasionPage from './pages/admin/AddOccasionPage'
 import EditOccasionPage from './pages/admin/EditOccasionPage'
+import DigitalBloomPage from './pages/DigitalBloomPage'
 
 function App() {
   return (
     <div className="min-h-screen bg-[#FAF9F7] text-stone-800">
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/bloom" element={<DigitalBloomPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/product/:slug" element={<ProductPage />} />
         <Route path="/login" element={<LoginPage />} />
