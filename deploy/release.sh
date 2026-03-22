@@ -37,21 +37,23 @@ else
     sh -c "npm ci && npm run build"
 fi
 
+echo "==> Updating server repo (${SSH_HOST})..."
+# Pull before rsync of Caddyfile — rsync touches tracked files and would block git pull.
+# Docker build uses ${APP_DIR} on the server; without pull, API routes can be missing → 404.
+REMOTE_PULL="cd ${APP_DIR}"
+if [ "${SKIP_GIT_PULL:-}" != "1" ]; then
+  REMOTE_PULL="${REMOTE_PULL} && git pull --ff-only"
+fi
+ssh "${SSH_HOST}" "${REMOTE_PULL}"
+
 echo "==> Syncing frontend dist to ${SSH_HOST}:${APP_DIR}/deploy/frontend-dist ..."
 rsync -avz --delete "${REPO_ROOT}/frontend/dist/" "${SSH_HOST}:${APP_DIR}/deploy/frontend-dist/"
 
 echo "==> Syncing deploy files to ${SSH_HOST}..."
 rsync -avz "${REPO_ROOT}/deploy/Caddyfile" "${REPO_ROOT}/deploy/.env.production.example" "${SSH_HOST}:${APP_DIR}/deploy/" 2>/dev/null || true
 
-echo "==> Updating server repo and rebuilding on ${SSH_HOST}..."
-# Docker build uses ${APP_DIR} on the server — not your laptop. Without git pull, API routes
-# (e.g. /api/v1/admin/*) stay missing after local-only deploys → 404 in the browser.
-REMOTE_CMD="cd ${APP_DIR}"
-if [ "${SKIP_GIT_PULL:-}" != "1" ]; then
-  REMOTE_CMD="${REMOTE_CMD} && git pull --ff-only"
-fi
-REMOTE_CMD="${REMOTE_CMD} && docker compose -f docker-compose.prod.yml --env-file .env.production build web && docker compose -f docker-compose.prod.yml --env-file .env.production up -d"
-ssh "${SSH_HOST}" "${REMOTE_CMD}"
+echo "==> Rebuilding and restarting on ${SSH_HOST}..."
+ssh "${SSH_HOST}" "cd ${APP_DIR} && docker compose -f docker-compose.prod.yml --env-file .env.production build web && docker compose -f docker-compose.prod.yml --env-file .env.production up -d"
 
 echo "==> Running migrations..."
 ssh "${SSH_HOST}" "cd ${APP_DIR} && docker compose -f docker-compose.prod.yml --env-file .env.production exec -T web bundle exec rails db:prepare" 2>/dev/null || true
