@@ -12,6 +12,8 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: self
 
+  has_many :posts, foreign_key: :author_id, dependent: :nullify
+
   validates :full_name, presence: true, length: { maximum: 255 }
 
   protected

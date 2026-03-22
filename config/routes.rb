@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => "/cable"
+
   devise_for :users,
              path: "api/v1/auth",
              path_names: {
@@ -24,10 +26,13 @@ Rails.application.routes.draw do
       resources :collections, only: [:index, :show]
       resources :occasions, only: [:index, :show]
       resources :products, only: [:index, :show]
+      resources :categories, only: [:index, :show]
+      resources :posts, only: [:index, :show]
       resources :newsletter_subscribers, only: [:create], path: "newsletter"
       resources :contact_messages, only: [:create]
 
       namespace :admin do
+        post "ai/complete", to: "ai#complete"
         get "dashboard", to: "dashboard#index"
         get "order_statuses", to: "order_statuses#index"
         resources :orders, only: [:index, :show, :update]
@@ -37,6 +42,8 @@ Rails.application.routes.draw do
         resources :classifications, param: :id, only: [:index, :show, :create, :update] do
           resources :classification_values, only: [:index, :create, :update, :destroy]
         end
+        resources :categories
+        resources :posts
         get "configuration", to: "settings#index"
         patch "configuration", to: "settings#update"
       end

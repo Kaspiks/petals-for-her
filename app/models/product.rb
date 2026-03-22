@@ -10,6 +10,8 @@ class Product < ApplicationRecord
   has_many :order_items, dependent: :restrict_with_error
   has_many :occasion_products, dependent: :destroy
   has_many :occasions, through: :occasion_products
+  has_many :post_products, dependent: :destroy
+  has_many :posts, through: :post_products
 
   has_one_attached :image
   has_many_attached :gallery_images

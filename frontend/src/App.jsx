@@ -10,6 +10,8 @@ import TermsOfServicePage from './pages/TermsOfServicePage'
 import ContactUsPage from './pages/ContactUsPage'
 import PublicCollectionsPage from './pages/CollectionsPage'
 import PublicOccasionsPage from './pages/OccasionsPage'
+import PublicJournalPage from './pages/PublicJournalPage'
+import JournalPostPage from './pages/JournalPostPage'
 import AdminRoute from './components/admin/AdminRoute'
 import AdminLayout from './pages/admin/AdminLayout'
 import DashboardPage from './pages/admin/DashboardPage'
@@ -28,6 +30,10 @@ import EditCollectionPage from './pages/admin/EditCollectionPage'
 import OccasionsPage from './pages/admin/OccasionsPage'
 import AddOccasionPage from './pages/admin/AddOccasionPage'
 import EditOccasionPage from './pages/admin/EditOccasionPage'
+import CategoriesPage from './pages/admin/CategoriesPage'
+import EditCategoryPage from './pages/admin/EditCategoryPage'
+import JournalPage from './pages/admin/JournalPage'
+import PostEditorPage from './pages/admin/PostEditorPage'
 import DigitalBloomPage from './pages/DigitalBloomPage'
 
 function App() {
@@ -45,6 +51,8 @@ function App() {
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/collections" element={<PublicCollectionsPage />} />
         <Route path="/occasions" element={<PublicOccasionsPage />} />
+        <Route path="/journal" element={<PublicJournalPage />} />
+        <Route path="/journal/:slug" element={<JournalPostPage />} />
         <Route path="/contact_us" element={<ContactUsPage />} />
         <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
           <Route index element={<DashboardPage />} />
@@ -64,6 +72,12 @@ function App() {
           <Route path="analytics" element={<Navigate to="/admin" replace />} />
           <Route path="configuration" element={<ConfigurationPage />} />
           <Route path="product-options" element={<ProductOptionsPage />} />
+          <Route path="categories" element={<CategoriesPage />} />
+          <Route path="categories/new" element={<EditCategoryPage />} />
+          <Route path="categories/:id/edit" element={<EditCategoryPage />} />
+          <Route path="journal" element={<JournalPage />} />
+          <Route path="journal/new" element={<PostEditorPage />} />
+          <Route path="journal/:id/edit" element={<PostEditorPage />} />
         </Route>
       </Routes>
     </div>

@@ -57,8 +57,10 @@ This will:
 - Build the frontend (`frontend/dist`)
 - Rsync `frontend/dist` to `petals:/opt/petals-for-her/deploy/frontend-dist/`
 - Rsync `deploy/Caddyfile` (and env example) to the server
-- On the server: `docker compose -f docker-compose.prod.yml build web && docker compose -f docker-compose.prod.yml up -d`
+- On the server: **`git pull`** (latest Rails/API code), then `docker compose -f docker-compose.prod.yml build web && … up -d`
 - Run migrations
+
+The Rails image is built from the **server’s** git checkout (`/opt/petals-for-her`), not from your laptop. If you skip `git pull`, new API routes can be missing → **404** on `/api/v1/admin/...`. Set `SKIP_GIT_PULL=1` only if you deploy backend another way.
 
 Default SSH host is `petals`; override with:
 

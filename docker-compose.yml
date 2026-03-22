@@ -22,6 +22,8 @@ x-app: &app
     DATABASE_PASSWORD: ${DATABASE_PASSWORD:-petals_for_her_dev}
     # Set in .env for production; dev falls back to Rails secret_key_base if unset
     DEVISE_JWT_SECRET_KEY: ${DEVISE_JWT_SECRET_KEY:-}
+    ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     MAILPIT_SMTP_HOST: mailpit
     MAILPIT_SMTP_PORT: "1025"
   volumes:

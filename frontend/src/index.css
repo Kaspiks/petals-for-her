@@ -6,6 +6,25 @@
   --color-blush: #D4A5A5;
   --color-blush-light: #E8C9C9;
   --color-blush-dark: #B88A8A;
+
+  --radius: 0.5rem;
+  --color-background: #FAF9F7;
+  --color-foreground: #1c1917;
+  --color-card: #ffffff;
+  --color-card-foreground: #1c1917;
+  --color-primary: #D4A5A5;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f5f5f4;
+  --color-secondary-foreground: #1c1917;
+  --color-muted: #f5f5f4;
+  --color-muted-foreground: #78716c;
+  --color-accent: #f5f5f4;
+  --color-accent-foreground: #1c1917;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e7e5e4;
+  --color-input: #e7e5e4;
+  --color-ring: #D4A5A5;
 }
 
 body {

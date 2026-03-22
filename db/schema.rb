@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_06_130002) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_09_100002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_130002) do
     t.datetime "updated_at", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "idx_on_blob_id_variation_digest_f36bede0d9", unique: true
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.string "category_type", limit: 20, default: "journal", null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.text "meta_description"
+    t.string "meta_title", limit: 255
+    t.string "name", null: false
+    t.bigint "parent_category_id"
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.string "visibility", limit: 20, default: "public", null: false
+    t.index ["active"], name: "index_categories_on_active"
+    t.index ["category_type"], name: "index_categories_on_category_type"
+    t.index ["parent_category_id"], name: "index_categories_on_parent_category_id"
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
   create_table "classification_values", force: :cascade do |t|
@@ -148,6 +166,40 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_130002) do
     t.index ["order_status_id"], name: "index_orders_on_order_status_id"
   end
 
+  create_table "post_products", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "post_id", null: false
+    t.bigint "product_id", null: false
+    t.integer "sort_order", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id", "product_id"], name: "index_post_products_on_post_id_and_product_id", unique: true
+    t.index ["post_id"], name: "index_post_products_on_post_id"
+    t.index ["product_id"], name: "index_post_products_on_product_id"
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.bigint "author_id", null: false
+    t.bigint "category_id"
+    t.datetime "created_at", null: false
+    t.boolean "featured", default: false, null: false
+    t.text "meta_description"
+    t.string "meta_title", limit: 255
+    t.datetime "published_at"
+    t.jsonb "puck_data", default: {}, null: false
+    t.integer "reading_time", default: 0
+    t.string "slug", null: false
+    t.string "status", limit: 20, default: "draft", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.integer "word_count", default: 0
+    t.index ["author_id"], name: "index_posts_on_author_id"
+    t.index ["category_id"], name: "index_posts_on_category_id"
+    t.index ["featured"], name: "index_posts_on_featured"
+    t.index ["published_at"], name: "index_posts_on_published_at"
+    t.index ["slug"], name: "index_posts_on_slug", unique: true
+    t.index ["status"], name: "index_posts_on_status"
+  end
+
   create_table "products", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.bigint "collection_id", null: false
@@ -214,12 +266,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_130002) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "categories", "categories", column: "parent_category_id"
   add_foreign_key "classification_values", "classifications"
   add_foreign_key "occasion_products", "occasions"
   add_foreign_key "occasion_products", "products"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "order_statuses"
+  add_foreign_key "post_products", "posts"
+  add_foreign_key "post_products", "products"
+  add_foreign_key "posts", "categories"
+  add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "products", "classification_values", column: "primary_fragrance_option_id"
   add_foreign_key "products", "classification_values", column: "ribbon_color_id"
   add_foreign_key "products", "classification_values", column: "ribbon_material_id"

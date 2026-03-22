@@ -43,8 +43,15 @@ rsync -avz --delete "${REPO_ROOT}/frontend/dist/" "${SSH_HOST}:${APP_DIR}/deploy
 echo "==> Syncing deploy files to ${SSH_HOST}..."
 rsync -avz "${REPO_ROOT}/deploy/Caddyfile" "${REPO_ROOT}/deploy/.env.production.example" "${SSH_HOST}:${APP_DIR}/deploy/" 2>/dev/null || true
 
-echo "==> Rebuilding and restarting on ${SSH_HOST}..."
-ssh "${SSH_HOST}" "cd ${APP_DIR} && docker compose -f docker-compose.prod.yml --env-file .env.production build web && docker compose -f docker-compose.prod.yml --env-file .env.production up -d"
+echo "==> Updating server repo and rebuilding on ${SSH_HOST}..."
+# Docker build uses ${APP_DIR} on the server — not your laptop. Without git pull, API routes
+# (e.g. /api/v1/admin/*) stay missing after local-only deploys → 404 in the browser.
+REMOTE_CMD="cd ${APP_DIR}"
+if [ "${SKIP_GIT_PULL:-}" != "1" ]; then
+  REMOTE_CMD="${REMOTE_CMD} && git pull --ff-only"
+fi
+REMOTE_CMD="${REMOTE_CMD} && docker compose -f docker-compose.prod.yml --env-file .env.production build web && docker compose -f docker-compose.prod.yml --env-file .env.production up -d"
+ssh "${SSH_HOST}" "${REMOTE_CMD}"
 
 echo "==> Running migrations..."
 ssh "${SSH_HOST}" "cd ${APP_DIR} && docker compose -f docker-compose.prod.yml --env-file .env.production exec -T web bundle exec rails db:prepare" 2>/dev/null || true
