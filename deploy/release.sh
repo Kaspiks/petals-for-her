@@ -53,7 +53,9 @@ echo "==> Syncing deploy files to ${SSH_HOST}..."
 rsync -avz "${REPO_ROOT}/deploy/Caddyfile" "${REPO_ROOT}/deploy/.env.production.example" "${SSH_HOST}:${APP_DIR}/deploy/" 2>/dev/null || true
 
 echo "==> Rebuilding and restarting on ${SSH_HOST}..."
-ssh "${SSH_HOST}" "cd ${APP_DIR} && docker compose -f docker-compose.prod.yml --env-file .env.production build web && docker compose -f docker-compose.prod.yml --env-file .env.production up -d"
+# Restart caddy so it reloads deploy/Caddyfile (bind-mounted). Otherwise /sitemap.xml can keep
+# serving SPA index.html until Caddy reloads → GSC "Sitemap is HTML".
+ssh "${SSH_HOST}" "cd ${APP_DIR} && docker compose -f docker-compose.prod.yml --env-file .env.production build web && docker compose -f docker-compose.prod.yml --env-file .env.production up -d && docker compose -f docker-compose.prod.yml --env-file .env.production restart caddy"
 
 echo "==> Running migrations..."
 ssh "${SSH_HOST}" "cd ${APP_DIR} && docker compose -f docker-compose.prod.yml --env-file .env.production exec -T web bundle exec rails db:prepare" 2>/dev/null || true
