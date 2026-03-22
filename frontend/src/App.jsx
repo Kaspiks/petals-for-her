@@ -10,6 +10,7 @@ import TermsOfServicePage from './pages/TermsOfServicePage'
 import ContactUsPage from './pages/ContactUsPage'
 import PublicCollectionsPage from './pages/CollectionsPage'
 import PublicOccasionsPage from './pages/OccasionsPage'
+import OccasionDetailPage from './pages/OccasionDetailPage'
 import PublicJournalPage from './pages/PublicJournalPage'
 import JournalPostPage from './pages/JournalPostPage'
 import AdminRoute from './components/admin/AdminRoute'
@@ -50,6 +51,7 @@ function App() {
         <Route path="/privacy_policy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/collections" element={<PublicCollectionsPage />} />
+        <Route path="/occasions/:slug" element={<OccasionDetailPage />} />
         <Route path="/occasions" element={<PublicOccasionsPage />} />
         <Route path="/journal" element={<PublicJournalPage />} />
         <Route path="/journal/:slug" element={<JournalPostPage />} />

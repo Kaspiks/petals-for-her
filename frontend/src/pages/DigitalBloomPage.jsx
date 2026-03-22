@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 
 const ACCENT = '#E8365D'
 
@@ -117,6 +118,11 @@ export default function DigitalBloomPage() {
       className="min-h-screen"
       style={{ background: 'linear-gradient(180deg, #FFF0F3 0%, #FFFFFF 50%)' }}
     >
+      <SEO
+        title="Digital Bloom"
+        description="Create a blooming ASCII flower and share a heartfelt message — a small digital gift from Petals for Her."
+        canonicalPath="/bloom"
+      />
       <header className="text-center pt-6 sm:pt-8">
         <Link
           to="/"
