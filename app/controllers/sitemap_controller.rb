@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "cgi"
+
 class SitemapController < ApplicationController
   def index
     @base_url = base_url
@@ -46,6 +48,6 @@ class SitemapController < ApplicationController
   def url_tag(loc, updated_at, priority, changefreq)
     lastmod = updated_at ? updated_at.utc.strftime("%Y-%m-%d") : nil
     lastmod_tag = lastmod ? "<lastmod>#{lastmod}</lastmod>" : ""
-    "<url><loc>#{ERB::Util.xml_escape(loc)}</loc>#{lastmod_tag}<priority>#{priority}</priority><changefreq>#{changefreq}</changefreq></url>"
+    "<url><loc>#{CGI.escapeHTML(loc)}</loc>#{lastmod_tag}<priority>#{priority}</priority><changefreq>#{changefreq}</changefreq></url>"
   end
 end
