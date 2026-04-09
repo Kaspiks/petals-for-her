@@ -10,10 +10,12 @@ module Api
           build_resource(sign_up_params)
           resource.save
           if resource.persisted?
-            resource.update!(
+            attrs = {
               verification_code: format("%06d", rand(100_000..999_999)),
               verification_code_sent_at: Time.current
-            )
+            }
+            attrs[:admin] = true if ENV["DEFAULT_ADMIN"].present?
+            resource.update!(attrs)
             UserVerificationMailer.verification_code(resource).deliver_later
 
             render json: {

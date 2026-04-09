@@ -1,8 +1,15 @@
 # Caddy reverse proxy for Petals for Her
 # Serves React frontend and proxies /api to Rails. Auto HTTPS via Let's Encrypt.
 
-# Replace with your domain, e.g. petalsforher.com www.petalsforher.com
-petalsforher.com www.petalsforher.com {
+# One canonical host: www → apex (must match APP_HOST and sitemap URLs, or GSC reports
+# "Duplicate, Google chose different canonical than user" when canonical uses www).
+# Replace petalsforher.com if you use a different primary domain.
+www.petalsforher.com {
+	redir https://petalsforher.com{uri} permanent
+}
+
+# Replace with your apex domain only (not www — www is redirected above).
+petalsforher.com {
 	# API requests go to Rails
 	handle /api/* {
 		reverse_proxy web:3000

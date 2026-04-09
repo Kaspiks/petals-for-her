@@ -33,7 +33,8 @@ Deploy the app to a server (e.g. Hetzner) with **Caddy** as the reverse proxy (H
      - `APP_HOST`: your domain (e.g. `petalsforher.com`), no `https://`
 
 4. **Caddyfile**
-   - Edit `deploy/Caddyfile` and replace `petalsforher.com www.petalsforher.com` with your domain(s).
+   - Edit `deploy/Caddyfile` and replace `petalsforher.com` / `www.petalsforher.com` with your domains.
+   - **www is redirected to the apex domain** so Google sees a single canonical host (align with `APP_HOST`).
 
 5. **DNS**
    - Point your domain’s A (and AAAA) records to the server’s IP.
