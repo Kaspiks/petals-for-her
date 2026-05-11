@@ -86,14 +86,14 @@ defaults = {
   "currency" => "USD",
   "seo_site_title" => "Petals for Her",
   "seo_title_suffix" => " – Petals for Her",
-  "seo_default_description" => "Timeless beauty, captured in fragrance. Handcrafted silk bouquets with bespoke scents. Shop everlasting blooms and artisanal arrangements.",
+  "seo_default_description" => "Scented satin bouquets for her in Riga—handcrafted with lasting fragrance. Everlasting blooms delivered across Latvia.",
   "seo_default_og_image" => "",
   "seo_org_name" => "Petals for Her",
   "seo_org_email" => "concierge@petalsforher.com",
   "seo_org_phone" => "",
-  "seo_org_address" => "",
+  "seo_org_address" => "Riga, Latvia",
   "seo_org_logo_url" => "",
-  "seo_org_description" => "Timeless beauty, captured in fragrance. Handcrafted silk bouquets with bespoke scents."
+  "seo_org_description" => "Scented satin bouquets for her in Riga—lasting fragrance and hyper-realistic everlasting blooms delivered across Latvia.",
 }
 defaults.each do |key, value|
   StoreSetting.find_or_create_by!(key: key) do |s|

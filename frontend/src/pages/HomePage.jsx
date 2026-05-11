@@ -22,7 +22,7 @@ const artFeatures = [
       </svg>
     ),
     title: 'Hand-Stitched Details',
-    desc: 'Every petal is individually shaped and assembled by our artisans for lifelike beauty.',
+    desc: 'Silk and satin petals, individually shaped and assembled for lifelike beauty.',
   },
   {
     icon: (
@@ -45,10 +45,38 @@ const artFeatures = [
 ]
 
 const occasions = [
-  { title: 'Anniversary', emoji: '💕', bg: 'bg-rose-50', border: 'border-rose-100', text: 'text-rose-700' },
-  { title: 'Birthday', emoji: '🎂', bg: 'bg-amber-50', border: 'border-amber-100', text: 'text-amber-700' },
-  { title: 'Wedding', emoji: '💒', bg: 'bg-violet-50', border: 'border-violet-100', text: 'text-violet-700' },
-  { title: "Valentine's Day", emoji: '❤️', bg: 'bg-pink-50', border: 'border-pink-100', text: 'text-pink-700' },
+  {
+    title: 'Anniversary',
+    slug: 'anniversary',
+    emoji: '💕',
+    bg: 'bg-rose-50',
+    border: 'border-rose-100',
+    text: 'text-rose-700',
+  },
+  {
+    title: 'Birthday',
+    slug: 'birthday',
+    emoji: '🎂',
+    bg: 'bg-amber-50',
+    border: 'border-amber-100',
+    text: 'text-amber-700',
+  },
+  {
+    title: 'Wedding',
+    slug: 'wedding',
+    emoji: '💒',
+    bg: 'bg-violet-50',
+    border: 'border-violet-100',
+    text: 'text-violet-700',
+  },
+  {
+    title: "Valentine's Day",
+    slug: 'valentines-day',
+    emoji: '❤️',
+    bg: 'bg-pink-50',
+    border: 'border-pink-100',
+    text: 'text-pink-700',
+  },
 ]
 
 const testimonials = [
@@ -96,8 +124,8 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-white text-stone-800">
       <SEO
-        title=""
-        description="Timeless beauty, captured in fragrance. Handcrafted silk bouquets with bespoke scents. Shop everlasting blooms and artisanal arrangements."
+        title="Scented silk & satin bouquets for her, Riga"
+        description="Scented satin bouquets for her in Riga—handcrafted with lasting fragrance. Everlasting blooms delivered across Latvia."
         canonicalPath="/"
       />
       <JsonLdOrganization />
@@ -113,15 +141,19 @@ function HomePage() {
                 className="inline-block text-xs font-semibold tracking-[0.2em] uppercase mb-4"
                 style={{ color: ACCENT }}
               >
-                Forever Flowers
+                Scented satin bouquets
               </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-stone-900 leading-tight mb-6">
-                <span className="font-sans">Flowers that </span>
-                <span className="font-serif italic">last forever</span>
+                <span className="font-sans block sm:text-5xl text-3xl leading-tight">
+                  Scented satin bouquets for her
+                </span>
+                <span className="font-serif italic block mt-3 text-3xl sm:text-4xl lg:text-5xl text-stone-700">
+                  Flowers that last forever
+                </span>
               </h1>
               <p className="text-lg text-stone-500 leading-relaxed mb-8 max-w-lg">
-                Handcrafted silk bouquets infused with bespoke scents.
-                Hyper-realistic, everlasting blooms that bring joy without the wilting.
+                Handcrafted satin bouquets infused with bespoke scents—hyper-realistic,
+                everlasting flowers she will love, without wilting.
               </p>
               <div className="flex flex-wrap gap-4 mb-10">
                 <Link
@@ -132,7 +164,7 @@ function HomePage() {
                   Shop Now
                 </Link>
                 <Link
-                  to="/#process"
+                  to="/journal"
                   className="px-7 py-3.5 rounded-lg font-semibold border-2 transition hover:bg-stone-50"
                   style={{ borderColor: ACCENT, color: ACCENT }}
                 >
@@ -154,7 +186,9 @@ function HomePage() {
                   <svg className="w-24 h-24 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                   </svg>
-                  <p className="text-sm">Hero image</p>
+                  <p className="text-sm text-stone-500 max-w-[220px] mx-auto px-2 leading-snug">
+                    Scented satin bouquet — Petals for Her
+                  </p>
                 </div>
               </div>
               <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-xl px-4 py-3 shadow-lg border border-stone-100 max-w-[220px]">
@@ -172,7 +206,7 @@ function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-10">
             <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-stone-900">
-              Featured Bouquets
+              Featured scented bouquets
             </h2>
             <Link
               to="/products"
@@ -193,7 +227,7 @@ function HomePage() {
                   {p.image_url ? (
                     <img
                       src={p.image_url}
-                      alt={p.name}
+                      alt={`${p.name} — scented satin bouquet`}
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     />
                   ) : (
@@ -223,7 +257,8 @@ function HomePage() {
             The Art of Everlasting Blooms
           </h2>
           <p className="text-stone-500 max-w-2xl mx-auto mb-14">
-            Every bouquet from Petals for Her is a masterpiece — crafted, scented, and designed to last a lifetime.
+            Scented satin bouquets for her—each arrangement is crafted to look lifelike,
+            smell beautiful, and last far beyond fresh flowers.
           </p>
           <div className="grid md:grid-cols-3 gap-10">
             {artFeatures.map((f) => (
@@ -249,13 +284,14 @@ function HomePage() {
             Perfect for Every Occasion
           </h2>
           <p className="text-stone-500 max-w-xl mx-auto mb-12">
-            Whether it's a milestone moment or an everyday surprise, our bouquets speak the language of love.
+            Gift scented satin bouquets for her—whether it&apos;s a milestone or an everyday surprise, our
+            flowers speak the language of love.
           </p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             {occasions.map((o) => (
               <Link
                 key={o.title}
-                to="/products"
+                to={`/occasions/${o.slug}`}
                 className={`${o.bg} ${o.border} border rounded-2xl p-6 lg:p-8 transition hover:shadow-md hover:-translate-y-0.5`}
               >
                 <span className="text-4xl block mb-4">{o.emoji}</span>
@@ -331,7 +367,7 @@ function HomePage() {
             Join the Petals Circle
           </h2>
           <p className="text-stone-400 mb-8">
-            Receive early access to seasonal collections and chic tips for your everlasting blooms.
+            Early access to seasonal scented satin collections and tips for everlasting bouquets for her.
           </p>
           <form onSubmit={handleNewsletter} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input

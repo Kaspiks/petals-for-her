@@ -6,14 +6,14 @@ const DEFAULTS = {
   seo_site_title: 'Petals for Her',
   seo_title_suffix: ' – Petals for Her',
   seo_default_description:
-    'Timeless beauty, captured in fragrance. Handcrafted silk bouquets with bespoke scents. Shop everlasting blooms and artisanal arrangements.',
+    'Scented satin bouquets for her in Riga—handcrafted with lasting fragrance. Everlasting blooms delivered across Latvia.',
   seo_default_og_image: '',
   seo_org_name: 'Petals for Her',
   seo_org_email: '',
   seo_org_phone: '',
-  seo_org_address: '',
+  seo_org_address: 'Riga, Latvia',
   seo_org_logo_url: '',
-  seo_org_description: '',
+  seo_org_description: 'Scented satin bouquets for her in Riga—lasting fragrance and hyper-realistic everlasting blooms.',
 }
 
 export function SeoConfigProvider({ children }) {

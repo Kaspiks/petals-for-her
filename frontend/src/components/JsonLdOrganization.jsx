@@ -32,6 +32,8 @@ export default function JsonLdOrganization() {
       address: {
         '@type': 'PostalAddress',
         streetAddress: cfg.seo_org_address,
+        addressLocality: 'Riga',
+        addressCountry: 'LV',
       },
     }),
   }
