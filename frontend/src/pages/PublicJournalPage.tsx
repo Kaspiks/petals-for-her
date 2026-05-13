@@ -190,26 +190,35 @@ export default function PublicJournalPage() {
   const categoryId = searchParams.get("category_id") || "";
 
   const fetchCategories = useCallback(async () => {
-    const res = await fetch("/api/v1/categories");
-    if (res.ok) {
-      const json = await res.json();
-      setCategories(json.data || []);
+    try {
+      const res = await fetch("/api/v1/categories");
+      if (res.ok) {
+        const json = await res.json();
+        setCategories(json.data || []);
+      }
+    } catch {
+      // API unavailable during pre-rendering
     }
   }, []);
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
-    const params = new URLSearchParams();
-    params.set("page", String(currentPage));
-    params.set("per_page", String(PER_PAGE));
-    if (categoryId) params.set("category_id", categoryId);
+    try {
+      const params = new URLSearchParams();
+      params.set("page", String(currentPage));
+      params.set("per_page", String(PER_PAGE));
+      if (categoryId) params.set("category_id", categoryId);
 
-    const res = await fetch(`/api/v1/posts?${params}`);
-    if (res.ok) {
-      const json = await res.json();
-      setPosts(json.data || []);
-      setTotal(json.total || 0);
-    } else {
+      const res = await fetch(`/api/v1/posts?${params}`);
+      if (res.ok) {
+        const json = await res.json();
+        setPosts(json.data || []);
+        setTotal(json.total || 0);
+      } else {
+        setPosts([]);
+        setTotal(0);
+      }
+    } catch {
       setPosts([]);
       setTotal(0);
     }
