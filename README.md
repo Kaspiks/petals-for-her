@@ -128,3 +128,4 @@ product.image.attach(io: File.open("path/to/image.jpg"), filename: "bouquet.jpg"
 ## License
 
 See [LICENSE](LICENSE).
+
