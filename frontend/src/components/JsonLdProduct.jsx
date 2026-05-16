@@ -67,7 +67,7 @@ export default function JsonLdProduct({ product }) {
     url: productUrl,
     sku: product.sku || `PFH-${product.id}`,
     mpn: product.mpn || `PFH-${product.slug || product.id}`,
-    image: product.image_url ? [product.image_url] : undefined,
+    image: product.image_url ? [product.image_url] : [`${SITE_URL}/hero-bouquet.png`],
     ...(cfg.seo_org_name && { brand: { '@type': 'Brand', name: cfg.seo_org_name } }),
     ...(product.collection?.name && { category: product.collection.name }),
     offers: {
