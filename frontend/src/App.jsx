@@ -36,6 +36,7 @@ import EditCategoryPage from './pages/admin/EditCategoryPage'
 import JournalPage from './pages/admin/JournalPage'
 import PostEditorPage from './pages/admin/PostEditorPage'
 import DigitalBloomPage from './pages/DigitalBloomPage'
+import FaqPage from './pages/FaqPage'
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
         <Route path="/journal" element={<PublicJournalPage />} />
         <Route path="/journal/:slug" element={<JournalPostPage />} />
         <Route path="/contact_us" element={<ContactUsPage />} />
+        <Route path="/faq" element={<FaqPage />} />
         <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
           <Route index element={<DashboardPage />} />
           <Route path="orders" element={<OrdersPage />} />

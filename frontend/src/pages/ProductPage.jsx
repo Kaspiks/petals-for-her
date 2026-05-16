@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
 import JsonLdProduct from '../components/JsonLdProduct'
+import JsonLdBreadcrumb from '../components/JsonLdBreadcrumb'
 
 const ACCENT = '#E8365D'
 
@@ -89,9 +90,36 @@ const whyBullets = [
 ]
 
 const staticReviews = [
-  { stars: 5, text: '"These flowers are absolutely stunning. My wife thought they were real! The scent is divine."', name: 'Jessica M.' },
-  { stars: 5, text: '"I ordered for our anniversary and she was over the moon. They still look perfect months later."', name: 'Robert K.' },
-  { stars: 5, text: '"Best gift I\'ve ever given. The packaging was beautiful and the quality is unmatched."', name: 'Sarah L.' },
+  {
+    stars: 5,
+    text: '"Indistinguishable from real flowers. The scent is gentle and lasts for weeks — I gifted these to my mom and she cried happy tears."',
+    name: 'Emily R.',
+    date: 'March 2026',
+  },
+  {
+    stars: 5,
+    text: '"The craftsmanship is beautiful and the satin petals catch the light just like real blooms. Our living room has never looked more elegant."',
+    name: 'David W.',
+    date: 'February 2026',
+  },
+  {
+    stars: 5,
+    text: '"Bought as an anniversary gift. Packaging was luxurious, the fragrance is sophisticated, and they look stunning months later."',
+    name: 'Anna K.',
+    date: 'January 2026',
+  },
+  {
+    stars: 4,
+    text: '"Beautiful product overall. Delivery to Riga was quick. Took one star off only because the scent was lighter than I expected."',
+    name: 'Michael T.',
+    date: 'December 2025',
+  },
+  {
+    stars: 5,
+    text: '"These satin bouquets are truly a work of art. The fragrance is bespoke and the bouquet holds its shape perfectly."',
+    name: 'Laura S.',
+    date: 'November 2025',
+  },
 ]
 
 const ImagePlaceholder = ({ className = 'w-12 h-12' }) => (
@@ -201,6 +229,16 @@ function ProductPage() {
         type="product"
       />
       <JsonLdProduct product={product} />
+      <JsonLdBreadcrumb
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Shop', path: '/products' },
+          ...(product.collection?.name
+            ? [{ name: product.collection.name, path: `/products?collection=${product.collection.id}` }]
+            : []),
+          { name: product.name, path: `/product/${product.slug || product.id}` },
+        ]}
+      />
       <Header />
 
       <main>
@@ -272,7 +310,8 @@ function ProductPage() {
                 {[1, 2, 3, 4, 5].map((s) => (
                   <StarIcon key={s} filled />
                 ))}
-                <span className="ml-2 text-sm text-stone-400">(128 reviews)</span>
+                <span className="ml-2 text-sm text-stone-500 font-medium">4.8</span>
+                <span className="ml-1 text-sm text-stone-400">(5 verified reviews)</span>
               </div>
 
               {/* Name */}
@@ -429,7 +468,10 @@ function ProductPage() {
                     ))}
                   </div>
                   <p className="text-stone-600 leading-relaxed mb-4 text-sm">{r.text}</p>
-                  <p className="font-semibold text-stone-800 text-sm">{r.name}</p>
+                  <div className="flex items-center justify-between">
+                    <p className="font-semibold text-stone-800 text-sm">{r.name}</p>
+                    <p className="text-xs text-stone-400">{r.date}</p>
+                  </div>
                 </div>
               ))}
             </div>

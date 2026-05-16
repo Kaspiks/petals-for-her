@@ -39,6 +39,7 @@ function Footer() {
                 </Link>
               </li>
               <li><Link to="/contact_us" className="text-sm text-stone-400 hover:text-white transition">Contact Us</Link></li>
+              <li><Link to="/faq" className="text-sm text-stone-400 hover:text-white transition">FAQ</Link></li>
             </ul>
           </div>
 

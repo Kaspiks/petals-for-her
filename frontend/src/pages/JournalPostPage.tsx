@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { Render } from "@puckeditor/core";
 import "@puckeditor/core/puck.css";
 import SEO from "../components/SEO";
+import JsonLdArticle from "../components/JsonLdArticle";
+import JsonLdBreadcrumb from "../components/JsonLdBreadcrumb";
 import { puckConfig } from "../config/puckConfig";
 
 interface Author {
@@ -193,6 +195,17 @@ export default function JournalPostPage() {
         description={post.meta_description || post.title}
         canonicalPath={`/journal/${post.slug}`}
         image={post.hero_image_url || undefined}
+      />
+      <JsonLdArticle post={post} />
+      <JsonLdBreadcrumb
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Journal", path: "/journal" },
+          ...(post.category
+            ? [{ name: post.category.name, path: `/journal?category=${post.category.slug}` }]
+            : []),
+          { name: post.title, path: `/journal/${post.slug}` },
+        ]}
       />
       <SimpleHeader />
 
