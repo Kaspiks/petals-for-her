@@ -262,6 +262,18 @@ export default function OccasionDetailPage() {
         )}
       </main>
 
+      {/* FAQ callout */}
+      <section className="pb-16 lg:pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-stone-500">
+            Not sure about scented satin bouquets for this occasion?{' '}
+            <Link to="/faq" className="font-semibold underline hover:text-[#E8365D] transition text-stone-700">
+              Read our scented satin bouquets FAQ
+            </Link>
+          </p>
+        </div>
+      </section>
+
       <Footer />
     </div>
   )

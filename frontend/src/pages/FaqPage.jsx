@@ -89,7 +89,7 @@ export default function FaqPage() {
   return (
     <div className="min-h-screen bg-white text-stone-800">
       <SEO
-        title="Scented satin bouquet FAQ — Petals for Her, Riga"
+        title="Scented satin bouquets FAQ — Petals for Her, Riga"
         description="Answers to common questions about Petals for Her scented satin bouquets — fragrance longevity, delivery across Latvia, care, returns, and bespoke orders."
         canonicalPath="/faq"
       />
@@ -109,13 +109,14 @@ export default function FaqPage() {
           </h1>
           <p className="text-lg text-stone-500 leading-relaxed mb-12">
             Everything you need to know about ordering, scenting, caring for, and gifting a
-            Petals for Her bouquet in Riga and across Latvia. Can&apos;t find what you&apos;re
-            looking for?{' '}
-            <Link to="/contact_us" className="underline text-stone-700 hover:text-[#E8365D] transition">
-              Get in touch with our atelier
-            </Link>
-            .
+            Petals for Her bouquet in Riga and across Latvia. 
           </p>
+
+          <img
+            src="/bouquet.jpg"
+            alt="Scented satin bouquets handcrafted by Petals for Her in Riga, Latvia"
+            className="w-full rounded-2xl object-cover mb-12"
+          />
 
           <div>
             {FAQS.map((faq, i) => (

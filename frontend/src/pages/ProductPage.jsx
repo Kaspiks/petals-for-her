@@ -518,6 +518,15 @@ function ProductPage() {
             </div>
           </section>
         )}
+        {/* FAQ callout */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 text-center">
+          <p className="text-stone-500">
+            Have questions about care, delivery, or returns?{' '}
+            <Link to="/faq" className="font-semibold underline hover:text-[#E8365D] transition text-stone-700">
+              Scented satin bouquets — your questions answered
+            </Link>
+          </p>
+        </section>
       </main>
 
       <Footer />

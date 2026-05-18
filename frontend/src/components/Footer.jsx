@@ -6,7 +6,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="lg:col-span-1">
-            <Link to="/" className="inline-flex items-center gap-2 mb-5">
+            <Link to="/" rel="nofollow" className="inline-flex items-center gap-2 mb-5">
               <svg className="w-6 h-6 text-[#E8365D]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>
@@ -24,32 +24,32 @@ function Footer() {
             <h3 className="text-xs uppercase tracking-widest text-stone-500 mb-5 font-semibold">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/contact_us" className="text-sm text-stone-400 hover:text-white transition">
+                <Link to="/contact_us" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">
                   Track order
                 </Link>
               </li>
               <li>
-                <Link to="/contact_us" className="text-sm text-stone-400 hover:text-white transition">
+                <Link to="/contact_us" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">
                   Delivery info
                 </Link>
               </li>
               <li>
-                <Link to="/journal" className="text-sm text-stone-400 hover:text-white transition">
+                <Link to="/journal" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">
                   Care &amp; journal
                 </Link>
               </li>
-              <li><Link to="/contact_us" className="text-sm text-stone-400 hover:text-white transition">Contact Us</Link></li>
-              <li><Link to="/faq" className="text-sm text-stone-400 hover:text-white transition">FAQ</Link></li>
+              <li><Link to="/contact_us" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">Contact Us</Link></li>
+              <li><Link to="/faq" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">FAQ</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-xs uppercase tracking-widest text-stone-500 mb-5 font-semibold">Occasions</h3>
             <ul className="space-y-3">
-              <li><Link to="/products?view=occasions" className="text-sm text-stone-400 hover:text-white transition">Anniversary</Link></li>
-              <li><Link to="/products?view=occasions" className="text-sm text-stone-400 hover:text-white transition">Birthday</Link></li>
-              <li><Link to="/products" className="text-sm text-stone-400 hover:text-white transition">New Arrivals</Link></li>
-              <li><Link to="/products" className="text-sm text-stone-400 hover:text-white transition">Corporate Gifts</Link></li>
+              <li><Link to="/products?view=occasions" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">Anniversary</Link></li>
+              <li><Link to="/products?view=occasions" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">Birthday</Link></li>
+              <li><Link to="/products" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">New Arrivals</Link></li>
+              <li><Link to="/products" rel="nofollow" className="text-sm text-stone-400 hover:text-white transition">Corporate Gifts</Link></li>
             </ul>
           </div>
 
@@ -58,6 +58,7 @@ function Footer() {
             <div className="flex gap-3">
               <Link
                 to="/journal"
+                rel="nofollow"
                 className="w-9 h-9 rounded-full bg-stone-800 flex items-center justify-center text-stone-400 hover:bg-[#E8365D] hover:text-white transition"
                 aria-label="Journal"
               >
@@ -67,6 +68,7 @@ function Footer() {
               </Link>
               <Link
                 to="/collections"
+                rel="nofollow"
                 className="w-9 h-9 rounded-full bg-stone-800 flex items-center justify-center text-stone-400 hover:bg-[#E8365D] hover:text-white transition"
                 aria-label="Collections"
               >
@@ -76,6 +78,7 @@ function Footer() {
               </Link>
               <Link
                 to="/products"
+                rel="nofollow"
                 className="w-9 h-9 rounded-full bg-stone-800 flex items-center justify-center text-stone-400 hover:bg-[#E8365D] hover:text-white transition"
                 aria-label="Shop bouquets"
               >
@@ -92,8 +95,8 @@ function Footer() {
             © 2026 Petals for Her Luxury Florists. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link to="/privacy_policy" className="text-sm text-stone-500 hover:text-white transition">Privacy Policy</Link>
-            <Link to="/terms" className="text-sm text-stone-500 hover:text-white transition">Terms of Service</Link>
+            <Link to="/privacy_policy" rel="nofollow" className="text-sm text-stone-500 hover:text-white transition">Privacy Policy</Link>
+            <Link to="/terms" rel="nofollow" className="text-sm text-stone-500 hover:text-white transition">Terms of Service</Link>
           </div>
         </div>
       </div>

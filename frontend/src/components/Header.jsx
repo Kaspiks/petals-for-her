@@ -10,7 +10,7 @@ function Header() {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-stone-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link to="/" className="flex items-center gap-2 shrink-0">
+          <Link to="/" rel="nofollow" className="flex items-center gap-2 shrink-0">
             <svg className="w-7 h-7 text-[#E8365D]" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
@@ -21,10 +21,10 @@ function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/products" className="text-sm font-medium text-stone-600 hover:text-[#E8365D] transition">Shop</Link>
-            <Link to="/collections" className="text-sm font-medium text-stone-600 hover:text-[#E8365D] transition">Collections</Link>
-            <Link to="/occasions" className="text-sm font-medium text-stone-600 hover:text-[#E8365D] transition">Occasions</Link>
-            <Link to="/#our-story" className="text-sm font-medium text-stone-600 hover:text-[#E8365D] transition">About</Link>
+            <Link to="/products" rel="nofollow" className="text-sm font-medium text-stone-600 hover:text-[#E8365D] transition">Shop</Link>
+            <Link to="/collections" rel="nofollow" className="text-sm font-medium text-stone-600 hover:text-[#E8365D] transition">Collections</Link>
+            <Link to="/occasions" rel="nofollow" className="text-sm font-medium text-stone-600 hover:text-[#E8365D] transition">Occasions</Link>
+            <Link to="/#our-story" rel="nofollow" className="text-sm font-medium text-stone-600 hover:text-[#E8365D] transition">About</Link>
           </nav>
 
           <div className="flex items-center gap-3 flex-1 justify-end min-w-0">
@@ -52,6 +52,7 @@ function Header() {
                 {user.admin && (
                   <Link
                     to="/admin"
+                    rel="nofollow"
                     className="p-2 text-stone-500 hover:text-[#E8365D] transition text-sm font-medium"
                   >
                     Admin
@@ -68,6 +69,7 @@ function Header() {
             ) : (
               <Link
                 to="/login"
+                rel="nofollow"
                 className="flex items-center gap-1.5 p-2 text-stone-500 hover:text-[#E8365D] transition text-sm font-medium"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

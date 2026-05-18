@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -228,6 +229,17 @@ function ContactUsPage() {
             >
               Book A Session
             </a>
+          </div>
+        </section>
+        {/* FAQ callout */}
+        <section className="border-t border-stone-200 bg-[#FAF9F7] py-12 lg:py-16">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p className="text-stone-500">
+              Have unanswered questions about our products?{' '}
+              <Link to="/faq" className="font-semibold underline hover:text-[#E8365D] transition text-stone-700">
+                Visit our scented satin bouquets FAQ
+              </Link>
+            </p>
           </div>
         </section>
       </main>

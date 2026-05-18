@@ -345,6 +345,18 @@ function ProductsPage() {
         </div>
       </main>
 
+      {/* FAQ callout */}
+      <section className="bg-[#FAF9F7]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 text-center">
+          <p className="text-stone-500">
+            Not sure which bouquet is right for you?{' '}
+            <Link to="/faq" className="font-semibold underline hover:text-[#E8365D] transition text-stone-700">
+              Read our scented satin bouquets FAQ
+            </Link>
+          </p>
+        </div>
+      </section>
+
       {/* Newsletter */}
       <section className="bg-stone-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 text-center">

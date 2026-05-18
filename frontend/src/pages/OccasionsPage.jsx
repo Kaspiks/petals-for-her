@@ -224,6 +224,18 @@ function OccasionsPage() {
         </div>
       </section>
 
+      {/* ── FAQ callout ── */}
+      <section className="py-12 lg:py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-stone-500 text-lg">
+            Wondering about scented satin bouquets for gifting?{' '}
+            <Link to="/faq" className="font-semibold underline hover:text-[#E8365D] transition text-stone-700">
+              Get your scented satin bouquets questions answered
+            </Link>
+          </p>
+        </div>
+      </section>
+
       {/* ── Newsletter ── */}
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -306,6 +306,18 @@ function CollectionsPage() {
         </div>
       </section>
 
+      {/* FAQ callout */}
+      <section className="pb-16 lg:pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-stone-500">
+            Curious how our bouquets are scented or how long they last?{' '}
+            <Link to="/faq" className="font-semibold underline hover:text-[#E8365D] transition text-stone-700">
+              Explore our scented satin bouquets FAQ
+            </Link>
+          </p>
+        </div>
+      </section>
+
       <Footer />
     </div>
   )
